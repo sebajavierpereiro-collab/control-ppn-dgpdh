@@ -1,0 +1,404 @@
+{
+ "origen": "ppn-sso (seeders/area/data.ts), copia de referencia octubre 2026",
+ "areas": [
+  {
+   "id": 1,
+   "nombre": "Salud Medica",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 3,
+   "nombre": "Equipo de Genero y Diversidad",
+   "activa": true,
+   "jerarquia": "Coordinador de equipo",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 17,
+   "nombre": "Equipo Complejo Penitenciario Federal N° I Ezeiza",
+   "activa": true,
+   "jerarquia": "Coordinador de equipo",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 18,
+   "nombre": "Equipo Complejo Penitenciario Federal N° II Marcos Paz",
+   "activa": true,
+   "jerarquia": "Coordinador de equipo",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 19,
+   "nombre": "Equipo Complejo Penitenciario Federal de la CABA",
+   "activa": true,
+   "jerarquia": "Coordinador de equipo",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 20,
+   "nombre": "Área Centro de Denuncias",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 21,
+   "nombre": "Salud Mental",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 22,
+   "nombre": "Área de Investigación y Documentación Eficaces de Casos de Tortura y/o Malos Tratos",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 23,
+   "nombre": "Área Extranjeros en Prisión y Argentinos Privados de su Libertad en el Exterior",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 24,
+   "nombre": "Equipo de Trabajo Niños, Adolescentes y Jóvenes Privados de su Libertad",
+   "activa": true,
+   "jerarquia": "Coordinador de equipo",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 25,
+   "nombre": "Centros de Transitorios de detención AMBA",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 26,
+   "nombre": "Delegación NEA - DNEA",
+   "activa": true,
+   "jerarquia": "Delegación",
+   "sede": "Corrientes"
+  },
+  {
+   "id": 27,
+   "nombre": "Educación en Contexto de Encierro (auditoria)",
+   "activa": true,
+   "jerarquia": "Coordinador de equipo",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 28,
+   "nombre": "Equipo procesos de egreso y post privación de libertad",
+   "activa": true,
+   "jerarquia": "Coordinador de equipo",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 29,
+   "nombre": "Dirección General de Protección de DDHH",
+   "activa": true,
+   "jerarquia": "Dirección general",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 30,
+   "nombre": "Delegación Centros No Penitenciarios frontera norte",
+   "activa": true,
+   "jerarquia": "Delegación",
+   "sede": "Corrientes"
+  },
+  {
+   "id": 31,
+   "nombre": "Delegación Misiones",
+   "activa": true,
+   "jerarquia": "Delegación",
+   "sede": "Misiones"
+  },
+  {
+   "id": 32,
+   "nombre": "Delegación NOA",
+   "activa": true,
+   "jerarquia": "Delegación",
+   "sede": "JuJuy"
+  },
+  {
+   "id": 33,
+   "nombre": "Delegación Litoral",
+   "activa": true,
+   "jerarquia": "Delegación",
+   "sede": "Santa Fe"
+  },
+  {
+   "id": 34,
+   "nombre": "Delegación Cordoba",
+   "activa": true,
+   "jerarquia": "Delegación",
+   "sede": "Cordoba"
+  },
+  {
+   "id": 35,
+   "nombre": "Delegación Cuyo",
+   "activa": true,
+   "jerarquia": "Delegación",
+   "sede": "Mendoza"
+  },
+  {
+   "id": 36,
+   "nombre": "Delegación Sur",
+   "activa": true,
+   "jerarquia": "Delegación",
+   "sede": "Chubut"
+  },
+  {
+   "id": 37,
+   "nombre": "Delegación Centro",
+   "activa": true,
+   "jerarquia": "Delegación",
+   "sede": "La Pampa"
+  },
+  {
+   "id": 38,
+   "nombre": "Delegación Comahue",
+   "activa": true,
+   "jerarquia": "Delegación",
+   "sede": "Rio Negro"
+  },
+  {
+   "id": 39,
+   "nombre": "Delegación Viedma",
+   "activa": true,
+   "jerarquia": "Delegación",
+   "sede": "Rio Negro"
+  },
+  {
+   "id": 40,
+   "nombre": "Dirección General de Delegaciones",
+   "activa": true,
+   "jerarquia": "Dirección general",
+   "sede": "CABA"
+  },
+  {
+   "id": 42,
+   "nombre": "Procurador",
+   "activa": true,
+   "jerarquia": "Procurador",
+   "sede": "CABA"
+  },
+  {
+   "id": 43,
+   "nombre": "Equipo de Investigación de Fallecimientos en Prisión",
+   "activa": true,
+   "jerarquia": "Coordinador de equipo",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 44,
+   "nombre": "ADMINISTRACION",
+   "activa": true,
+   "jerarquia": "Dirección general",
+   "sede": "CABA"
+  },
+  {
+   "id": 45,
+   "nombre": "Auditoria",
+   "activa": true,
+   "jerarquia": "Coordinador de equipo",
+   "sede": "CABA"
+  },
+  {
+   "id": 46,
+   "nombre": "Departamento de investigaciones",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "CABA"
+  },
+  {
+   "id": 47,
+   "nombre": "DIRECCIÓN LEGAL Y CONTENCIOSO -PENAL-",
+   "activa": true,
+   "jerarquia": "Dirección",
+   "sede": "CABA"
+  },
+  {
+   "id": 48,
+   "nombre": "Mesa de Entradas, Archivo y Digitalización",
+   "activa": true,
+   "jerarquia": "Dirección",
+   "sede": "CABA"
+  },
+  {
+   "id": 49,
+   "nombre": "Patrimonio y suministros",
+   "activa": true,
+   "jerarquia": "Jefatura de oficina",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 50,
+   "nombre": "Equipo Ejecución Penal DLyCP",
+   "activa": true,
+   "jerarquia": "Coordinador de equipo",
+   "sede": "CABA"
+  },
+  {
+   "id": 51,
+   "nombre": "Control Interno",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "CABA"
+  },
+  {
+   "id": 52,
+   "nombre": "Direccion Legal y Contencioso Administrativa",
+   "activa": true,
+   "jerarquia": "Dirección",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 53,
+   "nombre": "Observatorio de Carceles Federales",
+   "activa": true,
+   "jerarquia": "Dirección",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 54,
+   "nombre": "Biblioteca",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 55,
+   "nombre": "Promocion de la Prevencion de la Tortura",
+   "activa": true,
+   "jerarquia": "Dirección",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 56,
+   "nombre": "Metodos Marcos de Paz",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 57,
+   "nombre": "Direccion General Gestion Administrativa",
+   "activa": true,
+   "jerarquia": "Dirección general",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 58,
+   "nombre": "Subdireccion de Gestion Administrativa",
+   "activa": true,
+   "jerarquia": "Subdirección general",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 59,
+   "nombre": "Contabilidad y Finanzas",
+   "activa": true,
+   "jerarquia": "Dirección",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 60,
+   "nombre": "Control Presupuestario",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 61,
+   "nombre": "Retenciones y Liquidacion de Haberes",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 62,
+   "nombre": "Compras y Contrataciones",
+   "activa": true,
+   "jerarquia": "Jefatura de oficina",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 63,
+   "nombre": "Tesoreria",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 64,
+   "nombre": "Recursos Humanos",
+   "activa": true,
+   "jerarquia": "Dirección",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 65,
+   "nombre": "Servicios y Mantenimiento",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 66,
+   "nombre": "Automotores",
+   "activa": true,
+   "jerarquia": "Jefatura de oficina",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 67,
+   "nombre": "Sistemas y Comunicaciones",
+   "activa": true,
+   "jerarquia": "Jefatura de área",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 69,
+   "nombre": "Direccion de Cooperación y asuntos internacionales",
+   "activa": true,
+   "jerarquia": "Dirección",
+   "sede": "CABA"
+  },
+  {
+   "id": 70,
+   "nombre": "DIRECCION RELACIONES INSTITUCIONALES",
+   "activa": true,
+   "jerarquia": "Dirección",
+   "sede": "CABA"
+  },
+  {
+   "id": 71,
+   "nombre": "Dirección General de Politica Institucional",
+   "activa": true,
+   "jerarquia": "Dirección",
+   "sede": "Buenos Aires"
+  },
+  {
+   "id": 72,
+   "nombre": "Equipo de Trabajo Mar del Plata",
+   "activa": true,
+   "jerarquia": "Coordinador de equipo",
+   "sede": "Mar del Plata"
+  },
+  {
+   "id": 73,
+   "nombre": "Eventos de baja criticidad AMBA y Detenidos Federales en PBA",
+   "activa": true,
+   "jerarquia": "Asesor",
+   "sede": "Callao"
+  }
+ ]
+}

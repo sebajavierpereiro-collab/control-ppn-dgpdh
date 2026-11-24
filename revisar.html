@@ -1,0 +1,755 @@
+{% extends "base.html" %}
+{% block titulo %}Revisar — {{ nota.nombre_original }}{% endblock %}
+{% block body_class %} class="modo-revision"{% endblock %}
+{% block extra_head %}
+<style>
+/* ── Variable de fuente del corrector (ajustable desde header) ── */
+:root { --fuente-corrector: 13px; }
+
+/* ── Modo revisión: NO ocultar la barra lateral; solo ajustar el contenido ── */
+/* La barra lateral queda visible — el usuario puede colapsarla desde el botón ◀ del header */
+body.modo-revision .encabezado { display: none !important; }
+body.modo-revision .contenido { padding-top: 0 !important; }
+
+/* ── Header mínimo ── */
+.header-revision {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 14px; border-bottom: 1px solid var(--border, #d8d5cc);
+    background: var(--surface, #fff); position: sticky; top: 0; z-index: 100;
+    min-height: 44px; flex-wrap: wrap;
+}
+.header-rev-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; overflow: hidden; }
+.logo-mini { font-weight: 700; font-size: 13px; color: var(--accent, #1a4a8a); flex-shrink: 0; }
+.separador-v { width: 1px; height: 18px; background: var(--border, #d8d5cc); flex-shrink: 0; }
+.nota-titulo-link { font-size: 13px; font-weight: 500; color: var(--fg, #1a1916); white-space: nowrap;
+                    overflow: hidden; text-overflow: ellipsis; text-decoration: none; }
+.nota-titulo-link:hover { text-decoration: underline; }
+.nota-estado { font-size: 10px; font-weight: 700; letter-spacing: .06em; color: var(--accent, #1a4a8a);
+               background: #e8f0fb; border-radius: 3px; padding: 2px 6px; flex-shrink: 0; }
+.header-rev-centro { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+.btn-nav-cambio { background: none; border: 1px solid var(--border, #d8d5cc); border-radius: 4px;
+                  padding: 3px 8px; cursor: pointer; font-size: 12px; color: var(--fg2, #5a574e); }
+.btn-nav-cambio:hover { background: var(--surface2, #f5f4f1); }
+#contador-cambios { font-size: 12px; color: var(--fg2, #5a574e); white-space: nowrap; }
+.progress-revision { width: 70px; height: 4px; background: var(--border, #d8d5cc); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent, #1a4a8a); border-radius: 2px; transition: width .3s; }
+.header-rev-right { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+.btn-accion-global { font-size: 12px; padding: 4px 10px; border-radius: 4px; cursor: pointer;
+                     border: 1px solid var(--border, #d8d5cc); background: var(--surface, #fff);
+                     color: var(--fg, #1a1916); }
+.btn-accion-global:hover { background: var(--surface2, #f5f4f1); }
+.btn-accion-global.btn-ghost { color: var(--fg2, #5a574e); }
+.btn-inspector { font-size: 12px; padding: 4px 10px; border-radius: 4px; cursor: pointer;
+                 border: 1px solid var(--accent, #1a4a8a); background: none; color: var(--accent, #1a4a8a); }
+.btn-inspector:hover { background: #e8f0fb; }
+
+/* ── Área de trabajo ── */
+.area-revision { display: flex; height: calc(100vh - 44px); overflow: hidden; }
+
+/* ── Botón retráctil de la barra lateral (solo en modo revisión) ── */
+.btn-toggle-lateral-rev {
+    position: fixed; top: 50vh; left: calc(var(--ancho-lateral, 280px) - 12px);
+    transform: translateY(-50%); width: 24px; height: 44px;
+    border-radius: 0 12px 12px 0; border: 1px solid var(--border, #d8d5cc);
+    border-left: none; background: var(--surface, #fff); cursor: pointer;
+    font-size: 13px; color: var(--fg2, #5a574e); z-index: 50;
+    transition: left .2s ease; display: flex; align-items: center;
+    justify-content: center; box-shadow: 2px 0 6px rgba(0,0,0,.08);
+    line-height: 1;
+}
+.btn-toggle-lateral-rev:hover { background: var(--surface2, #f5f4f1); }
+body.lateral-rev-cerrada .btn-toggle-lateral-rev { left: 0; }
+body.lateral-rev-cerrada .lateral { transform: translateX(-100%); }
+body.lateral-rev-cerrada .principal { margin-left: 0; }
+.lateral { transition: transform .2s ease; }
+.principal { transition: margin-left .2s ease; }
+
+/* ── Columna izquierda ── */
+.col-cambios { flex: 1; min-width: 200px; display: flex; flex-direction: column;
+               overflow: hidden; border-right: 1px solid var(--border, #d8d5cc); }
+.col-cabecera { display: flex; align-items: center; justify-content: space-between;
+                padding: 7px 12px; background: var(--surface2, #f5f4f1);
+                border-bottom: 1px solid var(--border, #d8d5cc); flex-shrink: 0;
+                font-size: 12px; font-weight: 600; color: var(--fg2, #5a574e); }
+.btn-colapsar-col { background: none; border: none; cursor: pointer; font-size: 13px; color: var(--fg2, #5a574e); }
+.col-cambios-body { flex: 1; overflow-y: auto; }
+
+/* ── Inspector: posición fija, no afecta el layout principal ── */
+.panel-inspector {
+    position: fixed; top: 44px; right: 0;
+    width: 280px; max-width: 90vw;
+    height: calc(100vh - 44px);
+    display: flex; flex-direction: column;
+    background: var(--surface, #fff);
+    border-left: 1px solid var(--border, #d8d5cc);
+    box-shadow: -2px 0 8px rgba(0,0,0,.08);
+    z-index: 200; transition: transform .2s ease;
+}
+.panel-inspector.oculto { transform: translateX(100%); }
+/* notas-revision--plegado compat con notas_revision.js */
+#notas-revision.notas-revision--plegado .panel-inspector { transform: translateX(100%); }
+.notas-inspector__cabecera { display: flex; align-items: center; justify-content: space-between;
+                              padding: 8px 12px; background: var(--surface2, #f5f4f1);
+                              border-bottom: 1px solid var(--border, #d8d5cc); flex-shrink: 0; }
+.notas-inspector__cuerpo { flex: 1; overflow-y: auto; padding: 10px 12px; }
+
+/* ── Bloque de cambio ── */
+.bloque-cambio { border-bottom: 1px solid var(--border, #d8d5cc); overflow: hidden; }
+.bloque-cambio--sin-cambio { display: none; }
+.bc-cabecera { display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+               padding: 6px 12px; background: var(--surface2, #f5f4f1);
+               border-bottom: 1px solid var(--border, #d8d5cc); }
+.bc-numero { font-size: 11px; font-weight: 600; color: var(--fg2, #5a574e); }
+.bc-plegar { margin-left: auto; background: none; border: none; cursor: pointer;
+             font-size: 14px; color: var(--fg2, #5a574e); padding: 0 4px; }
+.tag-fuente { font-size: 10px; padding: 1px 5px; border-radius: 2px;
+              background: var(--border, #d8d5cc); color: var(--fg2, #5a574e); }
+.tag-diccionario { background: #e8f5ed; color: #1e6e3a; }
+.tag-languagetool { background: #e8f0fb; color: #1a4a8a; }
+.tag-ia_ollama { background: #f5e8fb; color: #5a1a8a; }
+.tag-informe { background: #fbf0e8; color: #8a4a1a; }
+/* Bloque unificado — sin separaciones internas visibles */
+.bc-propuesto { padding: 10px 12px 6px; }
+.bc-label { font-size: 9px; font-weight: 700; color: var(--fg2, #5a574e);
+            text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px;
+            opacity: .7; }
+.bc-label-hint { font-weight: 400; text-transform: none; letter-spacing: 0; }
+.bc-texto-marcado { font-size: var(--fuente-corrector); line-height: 1.65; margin: 0; }
+.bc-texto-marcado del, .diff-quitado { color: #8a1a1a; text-decoration: line-through; opacity: .75; }
+.bc-texto-marcado ins, .diff-agregado { color: #1e6e3a; background: #e8f5ed;
+                                         text-decoration: none; border-radius: 2px; padding: 0 2px; }
+.bc-editable { padding: 4px 12px 10px; border-top: 1px dashed rgba(0,0,0,.07); }
+.bc-textarea { width: 100%; font-size: var(--fuente-corrector); line-height: 1.65;
+               border: 1px solid var(--border, #d8d5cc); border-radius: 4px;
+               padding: 7px 9px; resize: vertical; min-height: 72px;
+               font-family: inherit; background: var(--surface, #fff); color: var(--fg, #1a1916);
+               box-sizing: border-box; }
+.bc-textarea:focus { outline: 2px solid var(--accent, #1a4a8a); outline-offset: -1px; }
+.bc-acciones { display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+               padding: 6px 12px; background: var(--surface2, #f5f4f1);
+               border-top: 1px solid var(--border, #d8d5cc); }
+.bc-radio-grupo { display: flex; gap: 10px; }
+.bc-radio { display: flex; align-items: center; gap: 4px; font-size: 12px; cursor: pointer; }
+.bc-radio input { cursor: pointer; }
+.bc-motivo { flex: 1; min-width: 160px; }
+.select-motivo { font-size: 12px; border: 1px solid var(--border, #d8d5cc); border-radius: 4px;
+                 padding: 4px 8px; background: var(--surface, #fff); color: var(--fg, #1a1916); width: 100%; }
+.bc-btn-link { font-size: 12px; color: var(--accent, #1a4a8a); background: none;
+               border: none; cursor: pointer; text-decoration: underline; white-space: nowrap; padding: 0; }
+.mejora-informe { padding: 10px 12px; border-top: 1px dashed var(--border, #d8d5cc); background: #fffbf5; }
+.acciones--revision { background: var(--surface2, #f5f4f1); }
+/* ── Control de tamaño de fuente ── */
+.ctrl-fuente { display: flex; align-items: center; gap: 4px; font-size: 12px; }
+.btn-fuente { background: none; border: 1px solid var(--border, #d8d5cc); border-radius: 4px;
+              padding: 2px 7px; cursor: pointer; font-size: 12px; font-weight: 600;
+              color: var(--fg, #1a1916); }
+.btn-fuente:hover { background: var(--surface2, #f5f4f1); }
+.fuente-valor { min-width: 32px; text-align: center; font-size: 11px; color: var(--fg2, #5a574e); }
+</style>
+{% endblock %}
+
+{% block contenido %}
+{% set ns = namespace(cambios=0, avisos=0) %}
+{% for fila in filas %}{% if fila.propuesta and fila.propuesta.original != fila.propuesta.propuesto %}{% set ns.cambios = ns.cambios + 1 %}{% endif %}{% endfor %}
+{% for h in (analisis_hallazgos or []) %}{% if h.estado == "ABIERTO" and not hallazgo_vacio(h) %}{% set ns.avisos = ns.avisos + 1 %}{% endif %}{% endfor %}
+
+{# ── Botón retráctil de la barra lateral ── #}
+<button type="button" class="btn-toggle-lateral-rev" id="btn-toggle-lateral-rev"
+        onclick="toggleLateral()" title="Mostrar u ocultar la barra lateral">‹</button>
+
+{# ── Header mínimo ── #}
+<div class="header-revision">
+    <div class="header-rev-left">
+        <span class="logo-mini">PPN</span>
+        <span class="separador-v"></span>
+        <a href="/nota/{{ nota.id }}" class="nota-titulo-link" title="Volver al documento">{{ nota.nombre_original | truncate(60) }}</a>
+        <span class="nota-estado">EN REVISIÓN</span>
+    </div>
+    <div class="header-rev-centro">
+        <button type="button" class="btn-nav-cambio" id="btn-anterior" onclick="navegarCambio(-1)" title="Cambio anterior (P)">◀</button>
+        <span id="contador-cambios">1 / {{ ns.cambios }}</span>
+        <button type="button" class="btn-nav-cambio" id="btn-siguiente" onclick="navegarCambio(1)" title="Cambio siguiente (N)">▶</button>
+        <div class="progress-revision"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="header-rev-right">
+        <button type="button" onclick="aceptarTodos()" class="btn-accion-global">✓ Aceptar todos</button>
+        <button type="button" onclick="rechazarTodos()" class="btn-accion-global btn-ghost">✗ Rechazar todos</button>
+        <span class="separador-v"></span>
+        <div class="ctrl-fuente" title="Tamaño de letra del corrector">
+            <button type="button" class="btn-fuente" onclick="cambiarFuente(-1)" title="Reducir letra">A−</button>
+            <span class="fuente-valor" id="fuente-valor">13px</span>
+            <button type="button" class="btn-fuente" onclick="cambiarFuente(1)" title="Aumentar letra">A+</button>
+        </div>
+        <span class="separador-v"></span>
+        <button type="button" onclick="toggleInspector()" class="btn-inspector" id="btn-inspector-toggle">Inspector ▶</button>
+        {% if usuario and es_admin(usuario) %}
+        <button type="submit" form="form-revision" name="y_firmar" value="sin_cambios" class="boton"
+                {% if ns.cambios %}data-confirmar="Se descartan todas las propuestas y se firma el documento original. ¿Seguir?"{% endif %}>Firmar sin cambios</button>
+        {% if ns.cambios %}
+        <button type="submit" form="form-revision" name="y_firmar" value="1" class="boton boton--primario">Guardar y firmar</button>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+{% if nota.alerta %}
+<div class="alerta-reapertura" style="margin:0;border-radius:0;border-left:none;border-right:none">
+    <strong>Devuelta a revisión:</strong> {{ nota.alerta }}
+</div>
+{% endif %}
+
+{# ── Área principal ── #}
+<form method="post" action="/nota/{{ nota.id }}/aplicar-propuestas" id="form-revision">
+<div id="notas-revision" class="area-revision">
+
+    {# ── Columna izquierda: cambios ── #}
+    <div class="col-cambios" id="col-cambios">
+        <div class="col-cabecera">
+            <span>Cambios propuestos ({{ ns.cambios }})</span>
+            <button type="button" class="btn-colapsar-col" id="btn-col-toggle"
+                    onclick="toggleColCambios()" title="Colapsar columna">◀</button>
+        </div>
+
+        <div class="col-cambios-body" id="documento-comparado">
+        {% set idx = namespace(n=0) %}
+        {% for fila in filas %}
+        {% if fila.propuesta %}
+        {% set p = fila.propuesta %}
+        {% set hay_cambio = p.original != p.propuesto %}
+        {% if hay_cambio %}{% set idx.n = idx.n + 1 %}{% endif %}
+        {% set fuentes = p.cambios | map(attribute="fuente") | list %}
+
+        <div class="bloque-cambio{% if not hay_cambio %} bloque-cambio--sin-cambio{% endif %}"
+             id="{% if hay_cambio %}cambio-{{ idx.n }}{% else %}nc-{{ loop.index }}{% endif %}"
+             data-pid="{{ p.id }}">
+
+            <div class="bc-cabecera">
+                {% if hay_cambio %}<span class="bc-numero">Cambio {{ idx.n }}/{{ ns.cambios }}</span>{% endif %}
+                {% if fuentes %}{% for f in fuentes|unique %}<span class="tag-fuente tag-{{ f }}">{{ {"diccionario": "Estilo", "languagetool": "Ortografía", "ia_ollama": "IA", "informe": "Informe"}.get(f, f) }}</span>{% endfor %}{% endif %}
+                {% if hay_cambio %}<button type="button" class="bc-plegar"
+                        onclick="plegarCambio('{{ idx.n }}')" title="Plegar este bloque">−</button>{% endif %}
+            </div>
+
+            <div class="bc-cuerpo" id="bc-cuerpo-{% if hay_cambio %}{{ idx.n }}{% else %}nc-{{ loop.index }}{% endif %}">
+
+                {# Texto propuesto con marcas inline #}
+                {% if hay_cambio %}
+                <div class="bc-propuesto">
+                    {% set tramos = p.tramos if p.tramos is defined and p.tramos else none %}
+                    {% if tramos %}
+                    <p class="bc-texto-marcado control-cambios" data-parrafo="{{ p.id }}">
+                        {%- for c in tramos -%}
+                        {%- if c.tipo == "igual" -%}<span class="cc-igual">{{ c.texto }}</span>
+                        {%- else -%}{%- set cl = clase_tramo(c.quitado, c.agregado) if clase_tramo is defined else "" -%}<span class="cc-cambio" data-estado="aceptado"><del class="diff-quitado tramo tramo--{{ cl }}">{{ c.quitado }}</del><ins class="diff-agregado tramo tramo--{{ cl }}">{{ c.agregado }}</ins><span class="cc-botones"><button type="button" class="cc-si" title="Aceptar este cambio" aria-label="Aceptar este cambio">{{ ico("check") }}</button><button type="button" class="cc-no" title="Rechazar este cambio" aria-label="Rechazar este cambio">{{ ico("x") }}</button></span></span>
+                        {%- endif -%}
+                        {%- endfor -%}
+                    </p>
+                    <p class="texto-ayuda cc-resumen" id="cc-resumen-{{ p.id }}"></p>
+                    {% else %}
+                    <p class="bc-texto-marcado texto-diff">
+                        {% for s in p.diff %}{% if s.tipo == "igual" %}{{ s.texto }}{% elif s.tipo == "quitado" %}<del class="diff-quitado">{{ s.texto }}</del>{% else %}<ins class="diff-agregado">{{ s.texto }}</ins>{% endif %}{% endfor %}
+                    </p>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {# Texto final editable — IDs con guión bajo para compat con endpoint y JS existente #}
+                <div class="bc-editable">
+                    <div class="bc-label">Texto final</div>
+                    <textarea id="texto_{{ p.id }}" name="texto_{{ p.id }}"
+                              class="bc-textarea parrafo-editable"
+                              data-parrafo="{{ p.id }}"
+                              data-original="{{ p.original | e }}"
+                              data-propuesto="{{ p.propuesto | e }}"
+                              rows="4">{{ p.propuesto }}</textarea>
+                    <input type="checkbox" id="rechazar_{{ p.id }}" name="rechazar_{{ p.id }}"
+                           style="display:none" aria-hidden="true">
+                </div>
+
+                {# Acciones: radio + motivo + restaurar #}
+                {% if hay_cambio %}
+                <div class="bc-acciones">
+                    <div class="bc-radio-grupo">
+                        <label class="bc-radio">
+                            <input type="radio" name="decision_{{ p.id }}" value="aceptar" checked
+                                   onchange="onDecision('{{ p.id }}', 'aceptar')">
+                            <span>✓ Aceptar</span>
+                        </label>
+                        <label class="bc-radio">
+                            <input type="radio" name="decision_{{ p.id }}" value="parcial"
+                                   onchange="onDecision('{{ p.id }}', 'parcial')">
+                            <span>~ Editar</span>
+                        </label>
+                        <label class="bc-radio">
+                            <input type="radio" name="decision_{{ p.id }}" value="rechazar"
+                                   onchange="onDecision('{{ p.id }}', 'rechazar')">
+                            <span>✗ Rechazar</span>
+                        </label>
+                    </div>
+                    <div class="bc-motivo" id="motivo-{{ p.id }}" style="display:none">
+                        <select name="motivo_rechazo_{{ p.id }}" class="select-motivo">
+                            <option value="">(opcional) Motivo del rechazo</option>
+                            <option value="estilo">No corresponde al estilo institucional</option>
+                            <option value="sentido">Altera el sentido del párrafo</option>
+                            <option value="incorrecto">La corrección es incorrecta</option>
+                            <option value="otro">Otro motivo</option>
+                        </select>
+                    </div>
+                    <button type="button" class="bc-btn-link rv-restaurar" data-parrafo="{{ p.id }}">↩ Restaurar</button>
+                    <button type="button" class="bc-btn-link rv-propuesta" data-parrafo="{{ p.id }}">↺ Propuesta</button>
+                </div>
+                {% endif %}
+
+                {# Mejoras desde informe #}
+                {% for m in mejoras_por_propuesta.get(p.id, []) %}
+                <div class="mejora-informe" id="mejora_{{ m.id }}" data-nota="{{ nota.id }}" data-propuesta="{{ p.id }}">
+                    <span class="etiqueta-columna">Sugerencia del informe <span class="chip-fuente chip-fuente--informe">{{ m.tipo | capitalize }}</span></span>
+                    <p class="texto-diff" style="font-size:13px">
+                        {% for s in m.diff %}{% if s.tipo == "igual" %}{{ s.texto }}{% elif s.tipo == "quitado" %}<del class="diff-quitado">{{ s.texto }}</del>{% else %}<ins class="diff-agregado">{{ s.texto }}</ins>{% endif %}{% endfor %}
+                    </p>
+                    <p class="texto-ayuda"><q>{{ m.cita }}</q></p>
+                    <div class="acciones">
+                        <button type="button" class="boton boton--primario" data-accion="aceptar" data-mejora="{{ m.id }}">Usar esta sugerencia</button>
+                        <button type="button" class="boton" data-accion="descartar" data-mejora="{{ m.id }}">Descartar</button>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>{# bc-cuerpo #}
+        </div>{# bloque-cambio #}
+        {% endif %}
+        {% endfor %}
+        </div>{# documento-comparado #}
+
+        <div class="acciones acciones--revision" style="padding:10px 12px;">
+            <button type="submit" class="boton">Guardar decisiones</button>
+        </div>
+    </div>{# col-cambios #}
+
+    {# ── Inspector ── #}
+    <aside class="notas-revision__inspector panel-inspector" id="panel-inspector"
+           aria-labelledby="t-inspector">
+        <div class="notas-inspector__cabecera">
+            <h2 id="t-inspector" style="font-size:13px;margin:0">Inspector</h2>
+            <button type="button" class="boton boton--chico" id="inspector-plegar"
+                    aria-expanded="true" aria-controls="inspector-cuerpo">Plegar</button>
+        </div>
+        <div class="notas-inspector__cuerpo" id="inspector-cuerpo">
+            {% if usuario and es_admin(usuario) %}
+            {% if ns.cambios == 0 %}
+            <div class="aviso-sin-cambios" role="status">
+                <span>{{ ico("check") }} <strong>Sin cambios propuestos.</strong></span>
+                <button type="submit" form="form-revision" name="y_firmar" value="sin_cambios"
+                        class="boton boton--primario" style="margin-top:6px">Firmar sin cambios</button>
+            </div>
+            {% else %}
+            <div class="aviso-con-cambios" role="status">
+                <strong>{{ ns.cambios }} párrafo{{ "s" if ns.cambios != 1 }} con cambios.</strong>
+                <div class="acciones" style="margin-top:8px">
+                    <button type="submit" form="form-revision" name="y_firmar" value="1"
+                            class="boton boton--primario">Guardar y firmar</button>
+                    <button type="submit" form="form-revision" name="y_firmar" value="sin_cambios"
+                            class="boton"
+                            {% if ns.cambios %}data-confirmar="Se descartan todas las propuestas y se firma el original. ¿Seguir?"{% endif %}>Firmar sin cambios</button>
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
+
+            <div class="acciones barra-reversion notas-inspector__acciones" style="margin-top:10px">
+                <button type="button" class="boton boton--chico" id="ver-original"
+                        aria-pressed="false">Mostrar el original</button>
+                <button type="button" class="boton boton--chico" id="rv-deshacer"
+                        disabled title="Ctrl+Z">Deshacer</button>
+            </div>
+
+            <details class="notas-mas-opciones" style="margin-top:10px">
+                <summary style="font-size:12px;cursor:pointer">Más opciones</summary>
+                <div class="acciones" style="margin-top:6px">
+                    <button type="button" class="boton boton--chico" id="rv-restaurar-todo">Restaurar todo el original</button>
+                    <button type="button" class="boton boton--chico" id="rv-propuesta-todo">Volver a todas las propuestas</button>
+                </div>
+                <p class="atajos-revision" style="font-size:11px;color:var(--fg2,#5a574e);margin-top:8px">
+                    Atajos: <kbd>N</kbd> sig. · <kbd>P</kbd> ant. · <kbd>A</kbd> aceptar · <kbd>R</kbd> rechazar · <kbd>Ctrl+Z</kbd> deshacer
+                </p>
+                <p style="margin-top:6px"><a class="boton boton--chico" href="/nota/{{ nota.id }}/control-cambios.docx">Descargar con control de cambios</a></p>
+                <details class="panel-lista vista-revision" style="margin-top:8px">
+                    <summary style="font-size:12px;cursor:pointer"><strong>Ver con formato</strong></summary>
+                    <div class="acciones" style="margin-top:6px">
+                        <button type="button" class="boton boton--chico"
+                                hx-get="/nota/{{ nota.id }}/vista?doc=original"
+                                hx-target="#hoja-rev" hx-swap="innerHTML">Original</button>
+                        <button type="button" class="boton boton--chico"
+                                hx-get="/nota/{{ nota.id }}/vista?doc=corregido"
+                                hx-target="#hoja-rev" hx-swap="innerHTML">Con correcciones</button>
+                    </div>
+                    <div id="hoja-rev"></div>
+                </details>
+                <details class="bloque-rechazo bloque-rechazo--nota-completa" style="margin-top:10px">
+                    <summary style="font-size:12px;cursor:pointer">Rechazar esta nota completa</summary>
+                    <p class="texto-ayuda">Criterio operativo (no es sobre la redacción).</p>
+                    <form method="post" action="/nota/{{ nota.id }}/rechazar-direccion">
+                        <textarea name="motivo" placeholder="Motivo (obligatorio)" required
+                                  style="width:100%;font-size:12px;min-height:60px"></textarea>
+                        <button type="submit" class="boton" style="margin-top:4px">Rechazar nota</button>
+                    </form>
+                </details>
+            </details>
+
+            {% set puede_resolver = true %}
+            {% set destino = "/nota/" ~ nota.id ~ "/revisar" %}
+            {% if analisis_hallazgos %}{% include "_consistencia.html" %}
+            {% else %}<p class="texto-ayuda" style="margin-top:12px">La revisión automática no encontró nada.</p>{% endif %}
+        </div>{# inspector-cuerpo #}
+    </aside>
+
+</div>{# area-revision / notas-revision #}
+</form>
+
+<script src="/static/notas_revision.js?v={{ static_v }}"></script>
+<script src="/static/autosize-textarea.js?v={{ static_v }}"></script>
+
+<script>
+// Control de cambios inline (tramos)
+document.querySelectorAll(".control-cambios").forEach(function (p) {
+    var id = p.dataset.parrafo,
+        area = document.getElementById("texto_" + id),
+        rech = document.getElementById("rechazar_" + id),
+        resumen = document.getElementById("cc-resumen-" + id);
+    function armar() {
+        var texto = "", si = 0, no = 0;
+        p.childNodes.forEach(function (n) {
+            if (n.classList && n.classList.contains("cc-igual")) texto += n.textContent;
+            else if (n.classList && n.classList.contains("cc-cambio")) {
+                var ok = n.dataset.estado === "aceptado";
+                texto += ok ? n.querySelector("ins").textContent : n.querySelector("del").textContent;
+                if (ok) si++; else no++;
+            }
+        });
+        area.value = texto;
+        area.dispatchEvent(new Event("input"));
+        if (rech) rech.checked = si === 0;
+        _sincRadio(id);
+        if (resumen) resumen.textContent = (si + no) > 1 ?
+            si + " de " + (si + no) + " cambios aceptados" + (si === 0 ? " — queda el original" : "") : "";
+    }
+    p.addEventListener("click", function (e) {
+        var b = e.target.closest("button"); if (!b) return;
+        var c = b.closest(".cc-cambio");
+        c.dataset.estado = b.classList.contains("cc-si") ? "aceptado" : "rechazado";
+        armar();
+    });
+    if (resumen) resumen.textContent = "";
+});
+</script>
+
+<script>
+// Deshacer/rehacer
+(function () {
+    var pila = [], boton = document.getElementById("rv-deshacer");
+    function area(id) { return document.getElementById("texto_" + id); }
+    function foto(id) {
+        var a = area(id), r = document.getElementById("rechazar_" + id),
+            p = document.querySelector('.control-cambios[data-parrafo="' + id + '"]');
+        return { id: id, valor: a ? a.value : "", rechazado: r ? r.checked : false,
+                 estados: p ? Array.prototype.map.call(p.querySelectorAll(".cc-cambio"),
+                     function (c) { return c.dataset.estado; }) : [] };
+    }
+    function poner(f) {
+        var a = area(f.id), r = document.getElementById("rechazar_" + f.id),
+            p = document.querySelector('.control-cambios[data-parrafo="' + f.id + '"]');
+        if (p) p.querySelectorAll(".cc-cambio").forEach(function (c, i) {
+            if (f.estados[i]) c.dataset.estado = f.estados[i];
+        });
+        if (a) { a.value = f.valor; a.dispatchEvent(new Event("input")); }
+        if (r) r.checked = f.rechazado;
+        _sincRadio(f.id);
+    }
+    function guardar(ids) {
+        pila.push(ids.map(foto));
+        if (pila.length > 200) pila.shift();
+        if (boton) boton.disabled = false;
+    }
+    window.revisionGuardarPaso = guardar;
+    function deshacer() { var paso = pila.pop(); if (paso) paso.forEach(poner); if (boton) boton.disabled = !pila.length; }
+    function aOriginal(id) {
+        var a = area(id), p = document.querySelector('.control-cambios[data-parrafo="' + id + '"]');
+        if (p) p.querySelectorAll(".cc-cambio").forEach(function (c) { c.dataset.estado = "rechazado"; });
+        if (a) { a.value = a.dataset.original; a.dispatchEvent(new Event("input")); }
+        var r = document.getElementById("rechazar_" + id);
+        if (r && a) r.checked = a.dataset.original !== a.dataset.propuesto;
+        _sincRadio(id);
+    }
+    function aPropuesta(id) {
+        var a = area(id), p = document.querySelector('.control-cambios[data-parrafo="' + id + '"]');
+        if (p) p.querySelectorAll(".cc-cambio").forEach(function (c) { c.dataset.estado = "aceptado"; });
+        if (a) { a.value = a.dataset.propuesto; a.dispatchEvent(new Event("input")); }
+        var r = document.getElementById("rechazar_" + id); if (r) r.checked = false;
+        _sincRadio(id);
+    }
+    var todos = Array.prototype.map.call(
+        document.querySelectorAll("textarea.parrafo-editable[data-parrafo]"),
+        function (a) { return a.dataset.parrafo; }
+    );
+    document.querySelectorAll(".control-cambios").forEach(function (p) {
+        p.addEventListener("click", function (e) { if (e.target.closest("button")) guardar([p.dataset.parrafo]); }, true);
+    });
+    document.querySelectorAll("textarea.parrafo-editable[data-parrafo]").forEach(function (a) {
+        var previa = null;
+        a.addEventListener("focus", function () { previa = foto(a.dataset.parrafo); });
+        a.addEventListener("change", function () {
+            if (previa && previa.valor !== a.value) { pila.push([previa]); if (boton) boton.disabled = false; }
+            previa = foto(a.dataset.parrafo);
+            _sincRadio(a.dataset.parrafo);
+        });
+    });
+    document.addEventListener("click", function (e) {
+        var b = e.target.closest(".rv-restaurar, .rv-propuesta"); if (!b) return;
+        guardar([b.dataset.parrafo]);
+        (b.classList.contains("rv-restaurar") ? aOriginal : aPropuesta)(b.dataset.parrafo);
+    });
+    var btnRestTodo = document.getElementById("rv-restaurar-todo");
+    var btnPropTodo = document.getElementById("rv-propuesta-todo");
+    if (btnRestTodo) btnRestTodo.addEventListener("click", function () { guardar(todos); todos.forEach(aOriginal); });
+    if (btnPropTodo) btnPropTodo.addEventListener("click", function () { guardar(todos); todos.forEach(aPropuesta); });
+    if (boton) boton.addEventListener("click", deshacer);
+    document.addEventListener("keydown", function (e) {
+        var t = (e.target.tagName || "").toLowerCase();
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z" && t !== "textarea" && t !== "input") {
+            e.preventDefault(); deshacer();
+        }
+    });
+})();
+</script>
+
+<script>
+// Ver original toggle + atajos de teclado
+(function () {
+    var doc = document.getElementById("documento-comparado"),
+        b = document.getElementById("ver-original");
+    if (!b) return;
+    function poner(ver) {
+        doc.classList.toggle("sin-original", !ver);
+        b.setAttribute("aria-pressed", ver ? "true" : "false");
+        b.textContent = ver ? "Ocultar el original" : "Mostrar el original";
+        try { localStorage.setItem("revision-original", ver ? "1" : "0"); } catch (e) {}
+    }
+    var guardado = null; try { guardado = localStorage.getItem("revision-original"); } catch (e) {}
+    poner(guardado === "1");
+    b.addEventListener("click", function () { poner(doc.classList.contains("sin-original")); });
+    var ccCambios = Array.prototype.slice.call(document.querySelectorAll(".cc-cambio")), i = -1;
+    function irCC(j) {
+        if (!ccCambios.length) return;
+        if (i >= 0) ccCambios[i].classList.remove("cc-cambio--actual");
+        i = (j + ccCambios.length) % ccCambios.length;
+        ccCambios[i].classList.add("cc-cambio--actual");
+        ccCambios[i].scrollIntoView({ block: "center", behavior: "smooth" });
+    }
+    document.addEventListener("keydown", function (e) {
+        var t = (e.target.tagName || "").toLowerCase();
+        if (t === "input" || t === "textarea" || t === "select" || e.ctrlKey || e.metaKey || e.altKey) return;
+        var k = e.key.toLowerCase();
+        if (k === "n") { e.preventDefault(); irCC(i + 1); }
+        else if (k === "p") { e.preventDefault(); irCC(i - 1); }
+        else if ((k === "a" || k === "r") && i >= 0) {
+            e.preventDefault();
+            ccCambios[i].querySelector(k === "a" ? ".cc-si" : ".cc-no").click();
+            irCC(i + 1);
+        }
+    });
+})();
+</script>
+
+<script>
+// Sugerencias del informe (async, sin recargar)
+document.querySelectorAll(".mejora-informe button[data-accion]").forEach(function (boton) {
+    boton.addEventListener("click", async function () {
+        var caja = boton.closest(".mejora-informe");
+        var url = "/nota/" + caja.dataset.nota + "/mejora/" + boton.dataset.mejora + "/" + boton.dataset.accion;
+        boton.disabled = true;
+        try {
+            var resp = await fetch(url, { method: "POST", credentials: "same-origin" });
+            var datos = await resp.json();
+            if (!resp.ok) throw new Error(datos.detail || "No se pudo resolver la sugerencia");
+            if (boton.dataset.accion === "aceptar") {
+                var a = document.getElementById("texto_" + datos.propuesta_id);
+                if (a) { a.value = datos.texto; a.dispatchEvent(new Event("input")); }
+                var r = document.getElementById("rechazar_" + datos.propuesta_id);
+                if (r) r.checked = false;
+                _sincRadio(datos.propuesta_id);
+                caja.innerHTML = "<p class='aviso aviso--exito'>Sugerencia cargada en «Texto final».</p>";
+            } else {
+                caja.remove();
+            }
+        } catch (e) {
+            if (typeof mostrarAviso !== "undefined") mostrarAviso(e.message);
+            boton.disabled = false;
+        }
+    });
+});
+</script>
+
+<script>
+// Nuevo layout: radio, inspector, columna, navegación
+
+function _sincRadio(pid) {
+    var rech = document.getElementById("rechazar_" + pid);
+    var area = document.getElementById("texto_" + pid);
+    if (!rech || !area) return;
+    var propuesto = (area.dataset.propuesto || "").trim();
+    var actual = area.value.trim();
+    var motivoDiv = document.getElementById("motivo-" + pid);
+    var radioAceptar = document.querySelector('input[name="decision_' + pid + '"][value="aceptar"]');
+    var radioParcial = document.querySelector('input[name="decision_' + pid + '"][value="parcial"]');
+    var radioRechazar = document.querySelector('input[name="decision_' + pid + '"][value="rechazar"]');
+    if (!radioAceptar) return;
+    if (rech.checked) {
+        radioRechazar.checked = true;
+    } else if (actual === propuesto) {
+        radioAceptar.checked = true;
+    } else {
+        radioParcial.checked = true;
+    }
+    if (motivoDiv) motivoDiv.style.display = rech.checked ? "" : "none";
+    _actualizarProgreso();
+}
+
+function onDecision(pid, decision) {
+    var area = document.getElementById("texto_" + pid);
+    var rech = document.getElementById("rechazar_" + pid);
+    var motivoDiv = document.getElementById("motivo-" + pid);
+    var cc = document.querySelector('.control-cambios[data-parrafo="' + pid + '"]');
+    if (decision === "aceptar") {
+        if (area) { area.value = area.dataset.propuesto; area.dispatchEvent(new Event("input")); }
+        if (rech) rech.checked = false;
+        if (cc) cc.querySelectorAll(".cc-cambio").forEach(function (c) { c.dataset.estado = "aceptado"; });
+        if (motivoDiv) motivoDiv.style.display = "none";
+    } else if (decision === "parcial") {
+        if (rech) rech.checked = false;
+        if (motivoDiv) motivoDiv.style.display = "none";
+    } else {
+        if (area) { area.value = area.dataset.original; area.dispatchEvent(new Event("input")); }
+        if (rech) rech.checked = true;
+        if (cc) cc.querySelectorAll(".cc-cambio").forEach(function (c) { c.dataset.estado = "rechazado"; });
+        if (motivoDiv) motivoDiv.style.display = "";
+    }
+    _actualizarProgreso();
+}
+
+function aceptarTodos() {
+    document.querySelectorAll(".bloque-cambio:not(.bloque-cambio--sin-cambio)").forEach(function (b) {
+        onDecision(b.dataset.pid, "aceptar");
+        var r = b.querySelector('input[value="aceptar"]'); if (r) r.checked = true;
+    });
+}
+function rechazarTodos() {
+    document.querySelectorAll(".bloque-cambio:not(.bloque-cambio--sin-cambio)").forEach(function (b) {
+        onDecision(b.dataset.pid, "rechazar");
+        var r = b.querySelector('input[value="rechazar"]'); if (r) r.checked = true;
+    });
+}
+
+function toggleInspector() {
+    var panel = document.getElementById("panel-inspector");
+    // también togglear en el wrapper para compat con notas_revision.js
+    var raiz = document.getElementById("notas-revision");
+    var oculto = panel.classList.toggle("oculto");
+    if (raiz) raiz.classList.toggle("notas-revision--plegado", oculto);
+    var plegBtn = document.getElementById("inspector-plegar");
+    if (plegBtn) {
+        plegBtn.setAttribute("aria-expanded", oculto ? "false" : "true");
+        plegBtn.textContent = oculto ? "Mostrar" : "Plegar";
+    }
+    var hdrBtn = document.getElementById("btn-inspector-toggle");
+    if (hdrBtn) hdrBtn.textContent = oculto ? "Inspector ▶" : "Inspector ◀";
+    try { localStorage.setItem("revision-inspector-plegado", oculto ? "1" : "0"); } catch (e) {}
+}
+
+function toggleColCambios() {
+    var col = document.getElementById("col-cambios");
+    var btn = document.getElementById("btn-col-toggle");
+    if (!col) return;
+    var c = col.classList.toggle("colapsada");
+    if (btn) btn.textContent = c ? "▶" : "◀";
+}
+
+var _cambioActual = 0;
+function navegarCambio(dir) {
+    var bloques = Array.prototype.slice.call(
+        document.querySelectorAll(".bloque-cambio:not(.bloque-cambio--sin-cambio)")
+    );
+    if (!bloques.length) return;
+    _cambioActual = Math.max(0, Math.min(bloques.length - 1, _cambioActual + dir));
+    bloques[_cambioActual].scrollIntoView({ behavior: "smooth", block: "start" });
+    var ctr = document.getElementById("contador-cambios");
+    if (ctr) ctr.textContent = (_cambioActual + 1) + " / " + bloques.length;
+}
+
+function plegarCambio(idx) {
+    var cuerpo = document.getElementById("bc-cuerpo-" + idx);
+    var btn = document.querySelector("#cambio-" + idx + " .bc-plegar");
+    if (!cuerpo) return;
+    var visible = cuerpo.style.display !== "none";
+    cuerpo.style.display = visible ? "none" : "";
+    if (btn) btn.textContent = visible ? "+" : "−";
+}
+
+function _actualizarProgreso() {
+    var bloques = document.querySelectorAll(".bloque-cambio:not(.bloque-cambio--sin-cambio)");
+    var total = bloques.length;
+    if (!total) return;
+    var interactuados = 0;
+    bloques.forEach(function (b) {
+        var radio = b.querySelector('input[type="radio"]:checked');
+        if (radio && radio.value !== "aceptar") {
+            interactuados++;
+        } else {
+            var area = document.getElementById("texto_" + b.dataset.pid);
+            if (area && area.value.trim() !== (area.dataset.propuesto || "").trim()) interactuados++;
+        }
+    });
+    var fill = document.getElementById("progress-fill");
+    if (fill) fill.style.width = Math.round(interactuados / total * 100) + "%";
+}
+
+// Restaurar estado del inspector desde localStorage
+(function () {
+    var plegado = null; try { plegado = localStorage.getItem("revision-inspector-plegado"); } catch (e) {}
+    if (plegado === "1") toggleInspector();
+})();
+
+// Toggle de la barra lateral izquierda
+function toggleLateral() {
+    var cerrada = document.body.classList.toggle("lateral-rev-cerrada");
+    var btn = document.getElementById("btn-toggle-lateral-rev");
+    if (btn) btn.textContent = cerrada ? "›" : "‹";
+    try { localStorage.setItem("revision-lateral-cerrada", cerrada ? "1" : "0"); } catch (e) {}
+}
+// Restaurar estado al cargar
+(function () {
+    var cerrada = null; try { cerrada = localStorage.getItem("revision-lateral-cerrada"); } catch (e) {}
+    if (cerrada === "1") {
+        document.body.classList.add("lateral-rev-cerrada");
+        var btn = document.getElementById("btn-toggle-lateral-rev");
+        if (btn) btn.textContent = "›";
+    }
+})();
+
+// Tamaño de fuente del corrector (persiste en sessionStorage)
+var _fuenteBase = 13;
+try { _fuenteBase = parseInt(sessionStorage.getItem("revisar_fuente") || "13"); } catch (e) {}
+function aplicarFuente(px) {
+    document.documentElement.style.setProperty("--fuente-corrector", px + "px");
+    var label = document.getElementById("fuente-valor");
+    if (label) label.textContent = px + "px";
+}
+function cambiarFuente(dir) {
+    _fuenteBase = Math.max(10, Math.min(20, _fuenteBase + dir));
+    try { sessionStorage.setItem("revisar_fuente", _fuenteBase); } catch (e) {}
+    aplicarFuente(_fuenteBase);
+}
+aplicarFuente(_fuenteBase);
+
+const cambiosData = {{ cambios_json | safe }};
+</script>
+{% endblock %}

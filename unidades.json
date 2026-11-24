@@ -1,0 +1,542 @@
+[
+ {
+  "nombre": "Complejo Penitenciario Federal I de Ezeiza -CPF I-",
+  "tipo": "Complejo penitenciario",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Complejo Penitenciario Federal II de Marcos Paz -CPF II-",
+  "tipo": "Complejo penitenciario",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Complejo Penitenciario Federal IV de Ezeiza -CPF IV-",
+  "tipo": "Complejo penitenciario",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Complejo Penitenciario Federal VII -ex Unidad 31-",
+  "tipo": "Complejo penitenciario",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Complejo Penitenciario Federal de CABA -CPF CABA-",
+  "tipo": "Complejo penitenciario",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Complejo Federal Jóvenes Adultos -CFJA-.",
+  "tipo": "Complejo penitenciario",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Complejo Penitenciario Federal VIII de Marcos Paz -CPF VIII-",
+  "tipo": "Complejo penitenciario",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 19 -Colonia Penal de Ezeiza-",
+  "tipo": "Unidad penal",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 21",
+  "tipo": "Unidad penal",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 34",
+  "tipo": "Unidad penal",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 28",
+  "tipo": "Unidad penal",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 17 -Colonia Penal-",
+  "tipo": "Unidad penal",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Centro de Régimen Cerrado Dr. Luis Agote",
+  "tipo": "Centro de régimen cerrado",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Centro de Régimen Cerrado Gral. San Martín",
+  "tipo": "Centro de régimen cerrado",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Centro de Régimen Cerrado Manuel Belgrano",
+  "tipo": "Centro de régimen cerrado",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Centro de Régimen Cerrado Dr. Manuel Rocca",
+  "tipo": "Centro de régimen cerrado",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Alcaidía 1 Bis",
+  "tipo": "Alcaidía",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Alcaidía 10",
+  "tipo": "Alcaidía",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Alcaidía 12 anexo A",
+  "tipo": "Alcaidía",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Alcaidía Berutti",
+  "tipo": "Alcaidía",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Alcaidía Paiva",
+  "tipo": "Alcaidía",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Alcaidía Petinatto",
+  "tipo": "Alcaidía",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Comisaría 12 da PP",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Comisaría 1ra PP",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Comisaría 2 A",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Comisaría 2da PP",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Comisaría 4ta PP",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Comisaría 7ma PP",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Comisaría Vecinal 12 A",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Comisaría Vecinal 1D",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "PFA Alcaidía Madariaga",
+  "tipo": "Alcaidía",
+  "zona": "AMBA",
+  "fuerza": "Policía Federal Argentina"
+ },
+ {
+  "nombre": "PFA Comisaría Ómnibus",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": "Policía Federal Argentina"
+ },
+ {
+  "nombre": "PFA Comisaría Tren Belgrano norte",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": "Policía Federal Argentina"
+ },
+ {
+  "nombre": "PFA Comisaría Tren Belgrano sur",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": "Policía Federal Argentina"
+ },
+ {
+  "nombre": "PFA Comisaría Tren Mitre",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": "Policía Federal Argentina"
+ },
+ {
+  "nombre": "PFA Comisaría Tren Roca",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": "Policía Federal Argentina"
+ },
+ {
+  "nombre": "PFA Comisaría Tren San Martín",
+  "tipo": "Comisaría",
+  "zona": "AMBA",
+  "fuerza": "Policía Federal Argentina"
+ },
+ {
+  "nombre": "PSA Ezeiza",
+  "tipo": "Fuerza de seguridad (dependencia)",
+  "zona": "AMBA",
+  "fuerza": "Policía de Seguridad Aeroportuaria"
+ },
+ {
+  "nombre": "Cuerpo Médico Forense -CMF-",
+  "tipo": "Organismo judicial / médico",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Centro de Admisión y Derivación “Úrsula Llona de Inchausti” (CAD)",
+  "tipo": "Otro",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Centro universitario de Devoto- CUD",
+  "tipo": "Centro universitario",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Centro universitario de Ezeiza- CUE",
+  "tipo": "Centro universitario",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Res. Almafuerte",
+  "tipo": "Residencia",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Res. Juana Azurduy",
+  "tipo": "Residencia",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "División de análisis de riesgo",
+  "tipo": "Otro",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Hospital Alvear",
+  "tipo": "Hospital",
+  "zona": "AMBA",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad Provincial 1-Loreto SPP",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad Provincial 1-Paraná",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "TOF Jujuy",
+  "tipo": "Tribunal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "PFA Rosario",
+  "tipo": "Fuerza de seguridad (dependencia)",
+  "zona": "Interior y otras",
+  "fuerza": "Policía Federal Argentina"
+ },
+ {
+  "nombre": "PFA Corrientes",
+  "tipo": "Fuerza de seguridad (dependencia)",
+  "zona": "Interior y otras",
+  "fuerza": "Policía Federal Argentina"
+ },
+ {
+  "nombre": "Complejo Penitenciario Rosario",
+  "tipo": "Complejo penitenciario",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "GNA Rosario",
+  "tipo": "Fuerza de seguridad (dependencia)",
+  "zona": "Interior y otras",
+  "fuerza": "Gendarmería Nacional"
+ },
+ {
+  "nombre": "Instituto Federal Mujeres CPF NOA Güemes",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Prefectura Naval Argentina Corrientes",
+  "tipo": "Fuerza de seguridad (dependencia)",
+  "zona": "Interior y otras",
+  "fuerza": "Prefectura Naval Argentina"
+ },
+ {
+  "nombre": "Las palmas",
+  "tipo": "Otro",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 25",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 30",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 4",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 6",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 14",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 12",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 5",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 15",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 9",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 2 - LAS FLORES",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Complejo Penitenciario federal VI, Lujan de Cuyo",
+  "tipo": "Complejo penitenciario",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Complejo Penitenciario Provincial N° I Boulogne Sur Mer",
+  "tipo": "Complejo penitenciario",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Complejo Penitenciario Provincial Nº II San Felipe",
+  "tipo": "Complejo penitenciario",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Clorinda-esc nº16 gn",
+  "tipo": "Otro",
+  "zona": "Interior y otras",
+  "fuerza": "Gendarmería Nacional"
+ },
+ {
+  "nombre": "Complejo Carcelario Nº1 \"Reverendo Francisco Luchesse\"",
+  "tipo": "Complejo penitenciario",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Complejo Penitenciario federal V",
+  "tipo": "Complejo penitenciario",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Escuadrón nº50 gn",
+  "tipo": "Fuerza de seguridad (dependencia)",
+  "zona": "Interior y otras",
+  "fuerza": "Gendarmería Nacional"
+ },
+ {
+  "nombre": "Unidad 13",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 16",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 22",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 7",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Unidad 8",
+  "tipo": "Unidad penal",
+  "zona": "Interior y otras",
+  "fuerza": null
+ },
+ {
+  "nombre": "Escuadrón nº11 gn San Ignacio",
+  "tipo": "Fuerza de seguridad (dependencia)",
+  "zona": "Interior y otras",
+  "fuerza": "Gendarmería Nacional"
+ },
+ {
+  "nombre": "Delegación NOA",
+  "tipo": "Delegación PPN",
+  "zona": "Delegaciones PPN",
+  "fuerza": null
+ },
+ {
+  "nombre": "Delegación NEA",
+  "tipo": "Delegación PPN",
+  "zona": "Delegaciones PPN",
+  "fuerza": null
+ },
+ {
+  "nombre": "Delegación Misiones",
+  "tipo": "Delegación PPN",
+  "zona": "Delegaciones PPN",
+  "fuerza": null
+ },
+ {
+  "nombre": "Delegación Centro",
+  "tipo": "Delegación PPN",
+  "zona": "Delegaciones PPN",
+  "fuerza": null
+ },
+ {
+  "nombre": "Delegación Sur",
+  "tipo": "Delegación PPN",
+  "zona": "Delegaciones PPN",
+  "fuerza": null
+ },
+ {
+  "nombre": "Delegación del Litoral",
+  "tipo": "Delegación PPN",
+  "zona": "Delegaciones PPN",
+  "fuerza": null
+ },
+ {
+  "nombre": "Delegación del Comahue",
+  "tipo": "Delegación PPN",
+  "zona": "Delegaciones PPN",
+  "fuerza": null
+ },
+ {
+  "nombre": "Delegación Viedma",
+  "tipo": "Delegación PPN",
+  "zona": "Delegaciones PPN",
+  "fuerza": null
+ },
+ {
+  "nombre": "Delegación Córdoba",
+  "tipo": "Delegación PPN",
+  "zona": "Delegaciones PPN",
+  "fuerza": null
+ },
+ {
+  "nombre": "Delegación Cuyo",
+  "tipo": "Delegación PPN",
+  "zona": "Delegaciones PPN",
+  "fuerza": null
+ },
+ {
+  "nombre": "Delegación Centros no penitenciarios",
+  "tipo": "Delegación PPN",
+  "zona": "Delegaciones PPN",
+  "fuerza": null
+ }
+]
