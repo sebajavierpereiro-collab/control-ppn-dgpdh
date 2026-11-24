@@ -1,0 +1,58 @@
+# ---------------------------------------------------------------------------------------------
+# Qué NO se sube nunca (pedido de Sistemas, informe del 17/11/2026)
+# ---------------------------------------------------------------------------------------------
+# Datos reales (base, documentos, personas detenidas)
+datos/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Configuración de cada equipo (clave secreta de sesiones, rutas, contraseñas). Se sube config.ini.ejemplo.
+config.ini
+
+# Claves privadas y certificados
+certs/
+*.key
+*.crt
+*.pem
+*.pfx
+*.p12
+
+# Respaldos y copias de datos
+respaldos/
+respaldos_codigo/
+*.zip
+*.bak
+
+# Planillas y documentos con datos de personas (los de prueba se generan en las pruebas)
+usuarios_base.xlsx
+*.xlsx
+*.xls
+*.csv
+*.docx
+*.doc
+*.pdf
+
+# Se instalan o generan en cada equipo
+languagetool/
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.log
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Archivos de trabajo
+Claude outputs/
+static/videos/
+
+# Sistema operativo y editores
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/

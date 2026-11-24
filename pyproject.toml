@@ -1,0 +1,27 @@
+# Configuración de herramientas de calidad (no cambia cómo se instala ni cómo corre el sistema).
+# Ver ARCHITECTURE.md y docs/adr/.
+
+[tool.pytest.ini_options]
+testpaths = ["pruebas"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 160
+target-version = "py312"  # rutas_circuito.py usa f-strings de 3.12 (PC: 3.12; Ubuntu 24.04: 3.12)
+extend-exclude = ["datos", "venv", ".venv", "static", "templates", "__pycache__"]
+
+[tool.ruff.lint]
+# F: errores reales (nombres sin definir, imports sin usar); E9: sintaxis; B: trampas habituales.
+# El código histórico tiene avisos: herramientas/verificar.py solo falla si aparecen NUEVOS (línea de base).
+select = ["F", "E9", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["F401", "F841", "B"]
+
+[tool.mypy]
+# Estricto solo en el paquete nuevo (dgpdh/); los módulos históricos se van tipando al pasar a dgpdh/.
+python_version = "3.12"
+files = ["dgpdh"]
+strict = true
+warn_unreachable = true
+ignore_missing_imports = true

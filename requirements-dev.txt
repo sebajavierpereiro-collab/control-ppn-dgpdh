@@ -1,0 +1,4 @@
+# Solo para desarrollo y verificación (herramientas/verificar.py); la PC de producción no los necesita.
+pytest>=8
+ruff>=0.6
+mypy>=1.10

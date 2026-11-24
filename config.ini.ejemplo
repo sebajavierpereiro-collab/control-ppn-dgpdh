@@ -1,0 +1,210 @@
+; config.ini.ejemplo — copialo como config.ini y completá los valores de este equipo.
+; config.ini NO se sube a GitHub (está en .gitignore).
+; Configuración de la app web de notas DGPDH.
+; Podés editar estos valores sin tocar el código.
+
+[firma]
+nombre_firmante = Nombre y apellido de quien firma
+archivo_firma = \\servidor\carpeta\firma_director.png
+; Firma individual de la Subdirectora/Subdirector. Si se deja sin indicar,
+; se usa un archivo "firma_subdirectora" con la misma extensión, en la
+; misma carpeta que archivo_firma.
+; archivo_firma_subdirectora = \\fsppn\e\Notas a la firma DGPDH\Notas a la firma\Entrada\firma_subdirectora.PNG
+; Cantidad de párrafos finales del documento donde se busca el bloque de firma
+ventana_busqueda_firma = 8
+
+[sesiones]
+; Clave para firmar las cookies de sesión (login). Se genera sola la
+; primera vez (ver _cargar_config) — no hace falta tocarla a mano.
+; Se genera sola la primera vez. NUNCA la subas a GitHub ni la copies de otro equipo.
+clave_secreta =
+
+[sso]
+; Ingreso con la cuenta del portal PPN (el mismo de Expedientes y Fichas de reclamo). Vacío = desactivado.
+; url: dirección del backend del portal. aplicacion_id: el ID (uuid) que el portal le asigna a esta aplicación.
+; En el portal, la dirección de esta aplicación tiene que ser la de este sistema (el portal agrega /auth/ingreso/<token>).
+url =
+aplicacion_id =
+portal_url =
+verificar_cada_minutos = 10
+
+[mesa_entradas]
+; Mesa de Entradas PPN (expedientes). PREPARADO, SIN CONECTAR: hace falta que Mesa de Entradas agregue una
+; credencial de servicio. url = backend; url_web = dirección que ve la gente; token_servicio = la credencial.
+url =
+url_web =
+token_servicio =
+
+[almacen_ppn]
+; Almacenamiento de archivos PPN (ppn-storage). PREPARADO, SIN CONECTAR. sistema_id = uuid del «sistema» de esta app.
+url =
+sistema_id =
+
+[numeracion]
+; Formato del número de nota y de proveído que propone el sistema ({numero}, {anio}, {anio2} = dos dígitos).
+formato_nota = {numero}/{anio}
+formato_proveido = {numero}/{anio}
+; Excel donde hoy se registran las notas (opcional): de ahí se toma el último número usado.
+excel_registro =
+
+[archivo]
+; true = el PDF del despacho se genera directamente en PDF/A (conservación a largo plazo).
+pdfa_en_despacho = false
+
+[plazos]
+; Días sin moverse en una etapa a partir de los cuales la nota se marca en ámbar y en rojo en el listado.
+dias_etapa_ambar = 3
+dias_etapa_rojo = 6
+
+[seguridad]
+; Poné true si la app se publica por HTTPS (proxy inverso, ver README):
+; las cookies de sesión pasan a viajar solo por conexión cifrada.
+https = false
+; Horas que dura una sesión abierta antes de pedir la clave de nuevo.
+horas_sesion = 12
+; Tamaño máximo de cada archivo que se sube (en MB).
+max_mb = 30
+; Minutos sin uso tras los que se cierra la sesión (0 = nunca).
+minutos_inactividad = 60
+; MODO SEGURO INSTITUCIONAL (soberanía de datos). El sistema nunca transmite información al exterior de forma
+; automática: toda conexión fuera de la red del organismo se bloquea y queda registrada (Administración →
+; Seguridad → Modo seguro). Con el modo activo también se bloquean respaldos en carpetas de nube pública.
+modo_seguro_institucional = true
+; Dominios de la red interna, separados por coma (ej.: ppn.local, intranet.ppn.gov.ar). localhost, IP privadas y
+; nombres de servidor sin dominio ya se consideran internos.
+dominios_internos =
+; Destinos externos AUTORIZADOS por la institución (ej.: un servidor de correo propio). Vacío = ninguno.
+; Cada conexión a un destino autorizado queda registrada igual.
+destinos_autorizados =
+
+[respaldos]
+; Copia diaria de la base y de los documentos. Conviene una carpeta de RED
+; o de otro disco: si la carpeta queda vacía se usa datos/respaldos.
+activo = true
+carpeta =
+conservar = 14
+hora = 18:00
+; Segunda copia en OTRO equipo o disco de red (opcional), p. ej. \\\\servidor\\respaldos_dgpdh
+copia_externa =
+
+[ollama]
+url = http://localhost:11434/api/generate
+modelo = qwen2.5:7b
+; Poné false para desactivar por completo la IA.
+usar_ia = true
+; Un modelo distinto por proceso (opcional). Si una clave falta o está
+; vacía, ese proceso usa el "modelo" de arriba. Cada modelo hay que
+; descargarlo antes con:  ollama pull <nombre>
+; modelo_correccion =
+; modelo_clasificacion =
+; modelo_consistencia =
+; modelo_redaccion =
+; Verificador cruzado: un SEGUNDO modelo (idealmente distinto) que confirma
+; los avisos de consistencia de la IA antes de mostrarlos. Si queda vacío se
+; puede activar igual desde Administración → IA → Calidad con el modelo general.
+; modelo_verificacion =
+
+[correo]
+; Avisos por correo y resumen diario. APAGADO por defecto: se activa en
+; Administración → Estado del sistema → Correo. Solo se manda a quien tiene
+; correo cargado. La clave queda en este archivo: usá una cuenta de servicio.
+servidor =
+puerto = 587
+usuario =
+clave =
+remitente =
+tls = true
+resumen_hora = 08:00
+; Dirección del sistema para los enlaces de los mails, ej: http://pc-notas:8000
+url_base =
+
+[ia_adaptativa]
+; Con el interruptor activo (Administración → IA → Calidad), la IA corre
+; cuando la PC tiene capacidad libre, aun en horario de oficina.
+; Necesita: pip install psutil
+activa = false
+cpu_max_libre = 80
+cpu_max_oficina = 35
+ram_libre_min_mb = 1500
+
+[expedientes]
+; Carpeta con las planillas de expedientes (.xls/.xlsx). SOLO SE LEEN, nunca
+; se modifican. Dejala vacía para desactivar. Los .xls necesitan: pip install xlrd
+carpeta =
+
+[detenidos]
+; Base de personas detenidas (menú «Personas detenidas»).
+; api_token: si se completa, otro sistema del organismo puede LEER la base en
+; /api/detenidos con la cabecera «Authorization: Bearer <token>». Vacío = apagado.
+api_token =
+; PREPARADO, SIN CONECTAR: dirección y token del servicio del sistema del menú de
+; la Procuración, para precargar los datos de una persona por DNI o LPU.
+url_sistema_procuracion =
+token_sistema_procuracion =
+
+[ia_automatica]
+; Análisis automático de TODOS los documentos cargados (clasificación,
+; consistencia, mejoras y corrección previa), solo fuera del horario de
+; oficina para no ralentizar el sistema. Hora de Buenos Aires.
+activa = true
+hora_inicio = 17:00
+hora_fin = 07:00
+; Sábados y domingos corre las 24 horas: se activa o desactiva en Administración → IA (activo si nunca se cambió).
+; Mientras alguien usa el sistema la IA no toma trabajos nuevos; retoma cuando pasan estos segundos sin uso (0 = no pausar).
+pausa_por_uso_segundos = 90
+
+; =============================================================================================
+; Secciones optativas. Sin ellas el sistema funciona igual (se usan los valores por defecto que
+; se indican). Para activarlas, sacá el «;» del principio de la línea.
+; OJO: ninguna línea de este archivo puede empezar con espacios (se leería como continuación de
+; la anterior).
+; =============================================================================================
+
+; [interfaz]
+; banda_beta = si
+; csp = no                      ; si = el navegador bloquea todo recurso de afuera (recomendado)
+; pwa = no                      ; si = app instalable para choferes (necesita HTTPS interno)
+; version = Beta 01
+; fecha_version = 14/11/2026
+; soporte = Sistemas de la DGPDH
+
+; [notas]
+; inactividad_aviso_dias = 7    ; aviso al agente por documento rechazado sin movimiento
+; inactividad_archivo_dias = 15 ; archivo automático (se puede recuperar)
+
+; [ia]
+; tapar_documentos_registro = true
+
+; [lenguaje_claro]
+; activo = true
+; sin_ia =                      ; tipos documentales que no pasan por la IA
+
+; [languagetool]
+; servidor =                    ; p. ej. http://127.0.0.1:8081 (solo direcciones de este equipo)
+
+; [ocr]                          ; PDF escaneados: necesita OCRmyPDF instalado
+; activo = false
+; comando = ocrmypdf
+; idioma = spa
+
+; [libreoffice]
+; unoserver = false
+; unoserver_host = 127.0.0.1
+; unoserver_puerto = 2003
+; unoconvert = unoconvert
+
+; [despacho]
+; qr_verificacion = false
+; url_verificacion =
+
+; [viajes]                       ; Autos PPN y Metas
+; dias_constancia = 7
+; descanso_minimo_horas = 10
+; desvio_odometro_pct = 50
+; desvio_combustible_pct = 25
+; factor_ruta = 1.3
+; sede_lat = -34.6
+; sede_lng = -58.4
+; osrm_url =                     ; solo un OSRM de la red interna, nunca uno público
+; optimizador =
+; mapa_pmtiles =
